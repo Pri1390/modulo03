@@ -32,4 +32,30 @@ app.post("/create", (request, response) => {
     return response.status(201).json(data)
 })
 
+// MÉTODO PUT 
+
+app.put("/edit/:id", (request, response) => {
+    // seta o id como um parâmetro  
+    const { id } = request.params
+
+    // reconhecendo o item
+    const update = data.find(
+        item => item.id === id
+    )
+    
+    // descobre a posição dele dentro da lista
+    const index = data.indexOf(update)
+
+
+    //array[posição] = item
+    //atualiza o item existente
+    data[index] = {
+        ...update,
+        ...request.body
+    }
+
+    return response.status(200).json(data[index])
+})
+
+
 app.listen(Number(process.env.PORT), () => console.log(" Servidor na porta 8080!"))
