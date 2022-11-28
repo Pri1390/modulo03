@@ -57,5 +57,23 @@ app.put("/edit/:id", (request, response) => {
     return response.status(200).json(data[index])
 })
 
+// MÉTODO DELETE
+
+app.delete("/delete/:id", (request, response) => {
+    const { id } = request.params
+
+    const deleteById = data.find(
+        item => item.id === id
+    )
+
+    const index = data.indexOf(deleteById)
+    
+    // exclui só o item que está posicioanado no index
+    data.splice(index, 1)
+
+    return response.status(200).json(data)
+
+})
+
 
 app.listen(Number(process.env.PORT), () => console.log(" Servidor na porta 8080!"))
