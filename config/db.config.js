@@ -1,14 +1,12 @@
-import { Mongoose } from "mongoose"
+import mongoose from "mongoose"
 
-const { default: mongoose } = require("mongoose")
-
-async function connect(){
-    try{
+async function connect() {
+    try {
         const dbConnect = await mongoose.connect(process.env.MONGODB_URI)
 
         console.log(`Conectado ao DB: ${dbConnect.connection.name}`)
-    }catch (error) {
-        console.log(error)    
+    } catch (error) {
+        console.log(error)
     }
 }
 

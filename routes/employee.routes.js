@@ -6,25 +6,23 @@ const router = express.Router()
 // banco de dados
 let data = [
     {
-        nome: "Miguel",
-        setor: "Transportes"
+        nome: "João ",
+        setor: "RH"
     }
 ]
 
-// ROTAS!!
-
-// MÉTODO GET
-router.get("/", (request, response) => {
-    // no json fica a resposta que queremos obter
-    // sempre retornamos algo ( uma resposta )
+// -------- ROTAS --------
+// método GET
+router.get('/', (request, response) => {
+    // no json a gente coloca a resposta que a gente quer obter
+    // SEMPRE retornamos algo (uma resposta)
     return response.status(200).json(data)
 })
 
 // método POST
-
-router.post("/create", (request, response) => {
-    const newData ={
-        // capturar  o body da requisição e adicionar um id
+router.post('/create', (request, response) => {
+    const newData = {
+        // capturar o body da requisição e adicionar um id
         ...request.body,
         id: uuidv4()
     }
@@ -34,23 +32,21 @@ router.post("/create", (request, response) => {
     return response.status(201).json(data)
 })
 
-// MÉTODO PUT 
-
-router.put("/edit/:id", (request, response) => {
-    // seta o id como um parâmetro  
+// método PUT
+router.put('/edit/:id', (request, response) => {
+    // seta o id como parâmetro
     const { id } = request.params
 
     // reconhecendo o item
     const update = data.find(
         item => item.id === id
     )
-    
+
     // descobre a posição dele dentro da lista
     const index = data.indexOf(update)
 
-
-    //array[posição] = item
-    //atualiza o item existente
+    // array[posição] = item
+    // atualiza o item existente
     data[index] = {
         ...update,
         ...request.body
@@ -59,22 +55,20 @@ router.put("/edit/:id", (request, response) => {
     return response.status(200).json(data[index])
 })
 
-// MÉTODO DELETE
-
-router.delete("/delete/:id", (request, response) => {
+// método DELETE
+router.delete('/delete/:id', (request, response) => {
     const { id } = request.params
 
     const deleteById = data.find(
-        item => item.id === id
+        item => item.id === id      
     )
 
     const index = data.indexOf(deleteById)
-    
-    // exclui só o item que está posicioanado no index
+
+    // exclui só o item que está posicionado no index
     data.splice(index, 1)
 
     return response.status(200).json(data)
-
 })
 
 export default router
