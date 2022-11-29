@@ -1,79 +1,20 @@
-import express from "express"
-import * as dotenv from "dotenv"
-import {v4 as uuidv4} from "uuid"
+import express from 'express'
+import * as dotenv from 'dotenv'
+import employeeRouter from './routes/employee.routes.js'
 
+// Configuração padrão do dotenv
 dotenv.config()
+// inicialização do express
 const app = express()
+// permitir a interpretação de json()   
 app.use(express.json())
 
-let data = [
-    {
-        nome: "Miguel",
-        setor: "Transportes "
-    }
-]
-
-// ROTAS!!
-app.get("/", (request, response) => {
-    // no json fica a resposta que queremos obter
-    // sempre retornamos algo ( uma resposta )
-    return response.status(200).json(data)
-})
-
-app.post("/create", (request, response) => {
-    const newData ={
-        // capturar  o body da requisição e adicionar um id
-        ...request.body,
-        id: uuidv4()
-    }
-
-    data.push(newData)
-
-    return response.status(201).json(data)
-})
-
-// MÉTODO PUT 
-
-app.put("/edit/:id", (request, response) => {
-    // seta o id como um parâmetro  
-    const { id } = request.params
-
-    // reconhecendo o item
-    const update = data.find(
-        item => item.id === id
-    )
-    
-    // descobre a posição dele dentro da lista
-    const index = data.indexOf(update)
+app.use("/employee", employeeRouter)
+// http://localhost:8080/employee/
+// http://localhost:8080/employee/create
+// http://localhost:8080/employee/edit/:id
 
 
-    //array[posição] = item
-    //atualiza o item existente
-    data[index] = {
-        ...update,
-        ...request.body
-    }
 
-    return response.status(200).json(data[index])
-})
-
-// MÉTODO DELETE
-
-app.delete("/delete/:id", (request, response) => {
-    const { id } = request.params
-
-    const deleteById = data.find(
-        item => item.id === id
-    )
-
-    const index = data.indexOf(deleteById)
-    
-    // exclui só o item que está posicioanado no index
-    data.splice(index, 1)
-
-    return response.status(200).json(data)
-
-})
-
-
+// executar o servidor na porta 8080
 app.listen(Number(process.env.PORT), () => console.log(" Servidor na porta 8080!"))
