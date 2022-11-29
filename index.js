@@ -1,10 +1,16 @@
 import express from 'express'
 import * as dotenv from 'dotenv'
 import employeeRouter from './routes/employee.routes.js'
+import dbConnect from "./config/db.config"
+
+
 
 // Configuração padrão do dotenv
 dotenv.config()
 // inicialização do express
+
+dbConnect()
+
 const app = express()
 // permitir a interpretação de json()   
 app.use(express.json())
