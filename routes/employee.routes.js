@@ -1,4 +1,5 @@
 import express from 'express'
+import { trusted } from 'mongoose'
 import EmployeeModel from "../models/employee.models.js"
 
 
@@ -8,16 +9,14 @@ const router = express.Router()
 // -------- ROTAS --------
 // método GET
 router.get('/', async (request, response) => {
-   try  {
+    try {
         const employees = await EmployeeModel.find()
 
         return response.status(200).json(employees)
-
-   } catch(error){
+    } catch (error) {
         console.log(error)
-        return response.status(500).json({msg: "Algo está errado!"})
-   }
-    
+        return response.status(500).json({ msg: "Algo está errado."})
+    }
 })
 
 // método POST
@@ -34,42 +33,43 @@ router.post('/create', async (request, response) => {
 })
 
 // método PUT
-router.put('/edit/:id', (request, response) => {
+router.put('/edit/:id', async (request, response) => {
     // seta o id como parâmetro
-    const { id } = request.params
+    
+    try{
+        const { id } = request.params
 
-    // reconhecendo o item
-    const update = data.find(
-        item => item.id === id
-    )
+        const update =  await EmployeeModel.findByIdAndUpdate(
+            id,
+            {...request.body},
+            {new: true, runValidators: true}
 
-    // descobre a posição dele dentro da lista
-    const index = data.indexOf(update)
+        )          
 
-    // array[posição] = item
-    // atualiza o item existente
-    data[index] = {
-        ...update,
-        ...request.body
+        return response.status(200).json(update)
+
+    }catch(error) {
+        console.log(error)
+        return response.status(500).json({msg: "Algo está errado!"})
+
     }
-
-    return response.status(200).json(data[index])
+  
+   
 })
 
 // método DELETE
-router.delete('/delete/:id', (request, response) => {
-    const { id } = request.params
+router.delete('/delete/:id', async (request, response) => {
+    try{
+        const { id } = request.params
 
-    const deleteById = data.find(
-        item => item.id === id      
-    )
+        const deleteEmployee = await EmployeeModel.findByIdAndDelete(id)
 
-    const index = data.indexOf(deleteById)
+        return response.status(200).json(deleteEmployee)          
+    }catch (error) {
+        console.log(error)
+        return response.status(500).json({msg: "Algo está errado!"})
 
-    // exclui só o item que está posicionado no index
-    data.splice(index, 1)
-
-    return response.status(200).json(data)
+    }     
 })
 
 export default router
