@@ -26,7 +26,13 @@ const employeeSchema = new Schema(
         },
         address: {
             city: { type: String } 
-        }
+        },
+        todos:[
+            {
+                type:Schema.Types.ObjectId,
+                ref:"Todo"
+            }
+        ]
     },
     {
         timestamps: true,

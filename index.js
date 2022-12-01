@@ -15,7 +15,7 @@ app.use(express.json())
 
 app.use('/employee', employeeRouter)
 
-
+app.use('/to-do', todoRouter)
 
 
 // executar o servidor na porta 8080
